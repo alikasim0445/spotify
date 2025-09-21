@@ -45,3 +45,4 @@
 - The backend uses Express with MongoDB via Mongoose
 - API calls from the frontend are configured to work with environment variables
 - CORS is enabled on the backend for cross-origin requests
+- The frontend build process has been optimized to skip type checking for faster builds
