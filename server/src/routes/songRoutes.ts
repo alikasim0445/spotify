@@ -6,7 +6,7 @@ import {
   updateSong,
   deleteSong,
   getStats
-} from '../controllers/songController.js';
+} from '../controllers/songController';
 
 const router = express.Router();
 

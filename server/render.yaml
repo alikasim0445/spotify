@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "services": [
+    {
+      "name": "spotify-backend",
+      "type": "web",
+      "env": "node",
+      "buildCommand": "npm install && npm run build",
+      "startCommand": "npm start",
+      "plan": "free",
+      "healthCheckPath": "/",
+      "envVars": [
+        {
+          "key": "NODE_VERSION",
+          "value": "18"
+        },
+        {
+          "key": "MONGODB_URI",
+          "sync": false
+        },
+        {
+          "key": "PORT",
+          "value": "10000"
+        }
+      ]
+    }
+  ]
+}
