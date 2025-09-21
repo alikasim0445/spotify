@@ -1,5 +1,4 @@
 import Song from '../models/Song.js';
-// Get all songs
 export const getSongs = async (req, res) => {
     try {
         const songs = await Song.find().sort({ createdAt: -1 });
@@ -9,7 +8,6 @@ export const getSongs = async (req, res) => {
         res.status(500).json({ message: 'Error fetching songs', error });
     }
 };
-// Get song by ID
 export const getSongById = async (req, res) => {
     try {
         const song = await Song.findById(req.params.id);
@@ -23,11 +21,9 @@ export const getSongById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching song', error });
     }
 };
-// Create a new song
 export const createSong = async (req, res) => {
     try {
         const { title, artist, album, genre } = req.body;
-        // Validate required fields
         if (!title || !artist || !album || !genre) {
             res.status(400).json({ message: 'Title, artist, album, and genre are required' });
             return;
@@ -45,7 +41,6 @@ export const createSong = async (req, res) => {
         res.status(500).json({ message: 'Error creating song', error });
     }
 };
-// Update a song
 export const updateSong = async (req, res) => {
     try {
         const { title, artist, album, genre } = req.body;
@@ -60,7 +55,6 @@ export const updateSong = async (req, res) => {
         res.status(500).json({ message: 'Error updating song', error });
     }
 };
-// Delete a song
 export const deleteSong = async (req, res) => {
     try {
         const song = await Song.findByIdAndDelete(req.params.id);
@@ -74,16 +68,12 @@ export const deleteSong = async (req, res) => {
         res.status(500).json({ message: 'Error deleting song', error });
     }
 };
-// Get statistics
 export const getStats = async (req, res) => {
     try {
-        // Total counts
         const totalSongs = await Song.countDocuments();
-        // Distinct counts
         const totalArtists = (await Song.distinct('artist')).length;
         const totalAlbums = (await Song.distinct('album')).length;
         const totalGenres = (await Song.distinct('genre')).length;
-        // Songs per genre
         const songsPerGenre = await Song.aggregate([
             {
                 $group: {
@@ -99,7 +89,6 @@ export const getStats = async (req, res) => {
                 }
             }
         ]);
-        // Songs and albums per artist
         const songsPerArtist = await Song.aggregate([
             {
                 $group: {
@@ -117,7 +106,6 @@ export const getStats = async (req, res) => {
                 }
             }
         ]);
-        // Songs per album
         const songsPerAlbum = await Song.aggregate([
             {
                 $group: {
@@ -151,3 +139,4 @@ export const getStats = async (req, res) => {
         res.status(500).json({ message: 'Error fetching statistics', error });
     }
 };
+//# sourceMappingURL=songController.js.map

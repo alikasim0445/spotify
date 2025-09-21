@@ -24,3 +24,4 @@ const SongSchema = new Schema({
     timestamps: true
 });
 export default mongoose.model('Song', SongSchema);
+//# sourceMappingURL=Song.js.map

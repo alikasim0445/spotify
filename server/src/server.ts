@@ -1,14 +1,14 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import songRoutes from './routes/songRoutes';
+import songRoutes from './routes/songRoutes.js';
+import dotenv from 'dotenv';
 
 // Load environment variables
-import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const PORT = parseInt(process.env.PORT || '10000', 10);
 
 // Configure CORS to allow requests from Netlify frontend
 const corsOptions = {
@@ -32,11 +32,7 @@ app.get('/', (req, res) => {
 });
 
 // Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI environment variable is not defined');
-}
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/spotify';
 
 mongoose
   .connect(MONGODB_URI)

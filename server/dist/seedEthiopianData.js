@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import Song from './models/Song.js';
-// Ethiopian song data
 const ethiopianSongs = [
     {
         title: 'Tezeta',
@@ -75,19 +74,15 @@ const ethiopianSongs = [
         genre: 'Ethiopian Pop'
     }
 ];
-// Connect to MongoDB
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/spotify';
 const seedDatabase = async () => {
     try {
         await mongoose.connect(MONGODB_URI);
         console.log('Connected to MongoDB');
-        // Clear existing songs
         await Song.deleteMany({});
         console.log('Cleared existing songs');
-        // Insert new songs
         const insertedSongs = await Song.insertMany(ethiopianSongs);
         console.log(`Inserted ${insertedSongs.length} Ethiopian songs into the database`);
-        // Display inserted songs
         console.log('\nInserted Songs:');
         insertedSongs.forEach((song, index) => {
             console.log(`${index + 1}. ${song.title} by ${song.artist} from album ${song.album} (${song.genre})`);
@@ -101,3 +96,4 @@ const seedDatabase = async () => {
     }
 };
 seedDatabase();
+//# sourceMappingURL=seedEthiopianData.js.map

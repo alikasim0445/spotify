@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import Song from '../models/Song';
+import Song from '../models/Song.js';
 
 // Get all songs
 export const getSongs = async (req: Request, res: Response): Promise<void> => {
