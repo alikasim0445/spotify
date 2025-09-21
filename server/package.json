@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "ts-node src/server.ts",
+    "dev": "ts-node --project tsconfig.dev.json src/server.ts",
     "build": "tsc",
     "seed": "node dist/seedEthiopianData.js",
     "test": "echo \"Error: no test specified\" && exit 1"
