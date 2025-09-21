@@ -14,7 +14,7 @@ const PORT = parseInt(process.env.PORT || '10000', 10);
 const corsOptions = {
   origin: [
     'http://localhost:5173', // Local development
-    'https://*.netlify.app'   // Netlify deployments
+    'http://minisongs.netlify.app/'   // Netlify deployments
   ],
   optionsSuccessStatus: 200
 };
