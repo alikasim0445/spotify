@@ -13,7 +13,7 @@ const PORT = parseInt(process.env.PORT || '10000', 10);
 const allowedOrigins = [
   'http://localhost:5173', // Development
   'http://localhost:5174',
-  'https://minisongs.netlify.app/' // Production - NO trailing slash!
+  'https://minisongs.netlify.app' // Production
 ];
 
 // Configure CORS to allow requests from any origin (for testing)
