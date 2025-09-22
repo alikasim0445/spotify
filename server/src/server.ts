@@ -10,17 +10,8 @@ dotenv.config();
 const app = express();
 const PORT = parseInt(process.env.PORT || '10000', 10);
 
-// Configure CORS to allow requests from Netlify frontend
-const corsOptions = {
-  origin: [
-    'http://localhost:5173', // Local development
-    'http://minisongs.netlify.app/'   // Netlify deployments
-  ],
-  optionsSuccessStatus: 200
-};
-
-// Middleware
-app.use(cors(corsOptions));
+// Configure CORS to allow requests from any origin (for testing)
+app.use(cors());
 app.use(express.json());
 
 // Routes
