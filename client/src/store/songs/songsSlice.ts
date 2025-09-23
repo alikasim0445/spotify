@@ -1,47 +1,42 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Song, Stats } from '../../types';
-import * as songsApi from '../../api/songsApi';
 
-// Async thunks
-export const fetchSongs = createAsyncThunk(
-  'songs/fetchSongs',
-  async () => {
-    const response = await songsApi.fetchSongs();
-    return response;
-  }
-);
+// Action creators for songs
+export const fetchSongs = {
+  pending: () => ({ type: 'songs/fetchSongs/pending' }),
+  fulfilled: (songs: Song[]) => ({ type: 'songs/fetchSongs/fulfilled', payload: songs }),
+  rejected: (error: string) => ({ type: 'songs/fetchSongs/rejected', payload: error }),
+};
 
-export const addSong = createAsyncThunk(
-  'songs/addSong',
-  async (song: Omit<Song, '_id' | 'createdAt' | 'updatedAt'>) => {
-    const response = await songsApi.createSong(song);
-    return response;
-  }
-);
+export const addSong = {
+  pending: (song: Omit<Song, '_id' | 'createdAt' | 'updatedAt'>) => ({ 
+    type: 'songs/addSong/pending', 
+    payload: song 
+  }),
+  fulfilled: (song: Song) => ({ type: 'songs/addSong/fulfilled', payload: song }),
+  rejected: (error: string) => ({ type: 'songs/addSong/rejected', payload: error }),
+};
 
-export const updateSong = createAsyncThunk(
-  'songs/updateSong',
-  async ({ id, song }: { id: string; song: Partial<Song> }) => {
-    const response = await songsApi.updateSong(id, song);
-    return response;
-  }
-);
+export const updateSong = {
+  pending: (payload: { id: string; song: Partial<Song> }) => ({ 
+    type: 'songs/updateSong/pending', 
+    payload 
+  }),
+  fulfilled: (song: Song) => ({ type: 'songs/updateSong/fulfilled', payload: song }),
+  rejected: (error: string) => ({ type: 'songs/updateSong/rejected', payload: error }),
+};
 
-export const deleteSong = createAsyncThunk(
-  'songs/deleteSong',
-  async (id: string) => {
-    await songsApi.deleteSong(id);
-    return id;
-  }
-);
+export const deleteSong = {
+  pending: (id: string) => ({ type: 'songs/deleteSong/pending', payload: id }),
+  fulfilled: (id: string) => ({ type: 'songs/deleteSong/fulfilled', payload: id }),
+  rejected: (error: string) => ({ type: 'songs/deleteSong/rejected', payload: error }),
+};
 
-export const fetchStats = createAsyncThunk(
-  'songs/fetchStats',
-  async () => {
-    const response = await songsApi.fetchStats();
-    return response;
-  }
-);
+export const fetchStats = {
+  pending: () => ({ type: 'songs/fetchStats/pending' }),
+  fulfilled: (stats: Stats) => ({ type: 'songs/fetchStats/fulfilled', payload: stats }),
+  rejected: (error: string) => ({ type: 'songs/fetchStats/rejected', payload: error }),
+};
 
 interface SongsState {
   songs: Song[];
@@ -68,56 +63,56 @@ const songsSlice = createSlice({
   extraReducers: (builder) => {
     // Fetch songs
     builder
-      .addCase(fetchSongs.pending, (state) => {
+      .addCase('songs/fetchSongs/pending', (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchSongs.fulfilled, (state, action: PayloadAction<Song[]>) => {
+      .addCase('songs/fetchSongs/fulfilled', (state, action: PayloadAction<Song[]>) => {
         state.loading = false;
         state.songs = action.payload;
       })
-      .addCase(fetchSongs.rejected, (state, action) => {
+      .addCase('songs/fetchSongs/rejected', (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch songs';
+        state.error = action.payload || 'Failed to fetch songs';
       });
 
     // Add song
     builder
-      .addCase(addSong.fulfilled, (state, action: PayloadAction<Song>) => {
+      .addCase('songs/addSong/fulfilled', (state, action: PayloadAction<Song>) => {
         state.songs.unshift(action.payload);
       })
-      .addCase(addSong.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to add song';
+      .addCase('songs/addSong/rejected', (state, action) => {
+        state.error = action.payload || 'Failed to add song';
       });
 
     // Update song
     builder
-      .addCase(updateSong.fulfilled, (state, action: PayloadAction<Song>) => {
+      .addCase('songs/updateSong/fulfilled', (state, action: PayloadAction<Song>) => {
         const index = state.songs.findIndex(song => song._id === action.payload._id);
         if (index !== -1) {
           state.songs[index] = action.payload;
         }
       })
-      .addCase(updateSong.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to update song';
+      .addCase('songs/updateSong/rejected', (state, action) => {
+        state.error = action.payload || 'Failed to update song';
       });
 
     // Delete song
     builder
-      .addCase(deleteSong.fulfilled, (state, action: PayloadAction<string>) => {
+      .addCase('songs/deleteSong/fulfilled', (state, action: PayloadAction<string>) => {
         state.songs = state.songs.filter(song => song._id !== action.payload);
       })
-      .addCase(deleteSong.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to delete song';
+      .addCase('songs/deleteSong/rejected', (state, action) => {
+        state.error = action.payload || 'Failed to delete song';
       });
 
     // Fetch stats
     builder
-      .addCase(fetchStats.fulfilled, (state, action: PayloadAction<Stats>) => {
+      .addCase('songs/fetchStats/fulfilled', (state, action: PayloadAction<Stats>) => {
         state.stats = action.payload;
       })
-      .addCase(fetchStats.rejected, (state, action) => {
-        state.error = action.error.message || 'Failed to fetch stats';
+      .addCase('songs/fetchStats/rejected', (state, action) => {
+        state.error = action.payload || 'Failed to fetch stats';
       });
   },
 });

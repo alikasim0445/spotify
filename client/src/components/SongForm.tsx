@@ -3,22 +3,14 @@ import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../store'; // Import AppDispatch from your store
 import { addSong, updateSong } from '../store/songs/songsSlice';
 import type { Song } from '../types';
-import {  Box, Button, TextField, Typography } from '@mui/material';
+import {  Box, Button, TextField } from '@mui/material';
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
 import { GlassCard, GradientButton, GradientText } from '../styled-components';
 
 interface SongFormProps {
   song?: Song;
   onCancel: () => void;
 }
-
-// Keyframes for animations
-const shake = keyframes`
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-`;
 
 // Styled components using Emotion
 const FormContainer = styled(GlassCard)`
@@ -116,10 +108,10 @@ const SongForm: React.FC<SongFormProps> = ({ song, onCancel }) => {
     
     if (song) {
       // Update existing song
-      dispatch(updateSong({ id: song._id, song: formData }));
+      dispatch(updateSong.pending({ id: song._id, song: formData }));
     } else {
       // Add new song
-      dispatch(addSong(formData));
+      dispatch(addSong.pending(formData));
     }
     
     onCancel();

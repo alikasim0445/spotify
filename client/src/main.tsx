@@ -6,7 +6,6 @@ import createCache from '@emotion/cache'
 import { store } from './store'
 import './index.css'
 import App from './App.tsx'
-import  GlobalStyles  from './styled-components/GlobalStyles.ts'
 
 // Create emotion cache
 const cache = createCache({

@@ -18,8 +18,6 @@ import {
   TableRow,
   Paper,
   useTheme,
-  useMediaQuery,
-  alpha,
   Chip,
   LinearProgress
 } from '@mui/material';
@@ -32,7 +30,7 @@ import {
   TrendingUp as TrendingUpIcon
 } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
+import { keyframes } from '@emotion/react';
 
 // Keyframes for animations
 const subtlePulse = keyframes`
@@ -53,15 +51,15 @@ const StatsHeader = styled(Box)`
   animation: ${subtlePulse} 4s ease-in-out infinite;
 `;
 
-const StatsTitle = styled(Typography)`
-  background: linear-gradient(135deg, ${(props: any) => props.theme.palette.primary.main} 0%, ${(props: any) => props.theme.palette.secondary.main} 100%) !important;
-  background-clip: text !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  margin-bottom: 16px !important;
-  font-weight: 800 !important;
-  text-align: center;
-`;
+const StatsTitle = styled(Typography)(({ theme }) => ({
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+  backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  marginBottom: '16px',
+  fontWeight: 800,
+  textAlign: 'center',
+}));
 
 const StatsSubtitle = styled(Typography)`
   color: #b3b3b3 !important;
@@ -202,10 +200,9 @@ const Stats: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { stats, loading, error } = useSelector((state: RootState) => state.songs);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    dispatch(fetchStats());
+    dispatch(fetchStats.pending());
   }, [dispatch]);
 
   if (loading) {
@@ -250,7 +247,6 @@ const Stats: React.FC = () => {
 
   // Find maximum values for progress bars
   const maxSongsPerGenre = Math.max(...stats.songsPerGenre.map(item => item.count), 0);
-  const maxSongsPerArtist = Math.max(...stats.songsPerArtist.map(item => item.songs), 0);
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3 }, width: '100%', maxWidth: '100%' }}>

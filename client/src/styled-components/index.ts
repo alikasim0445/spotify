@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
+import { keyframes } from '@emotion/react';
 import { Box, Button, Card, Typography } from '@mui/material';
 
 // Export theme

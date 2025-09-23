@@ -25,8 +25,7 @@ import {
   Paper,
   IconButton,
   useTheme,
-  useMediaQuery,
-  alpha
+  useMediaQuery
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -39,33 +38,32 @@ import {
   Analytics as AnalyticsIcon
 } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import { css, keyframes } from '@emotion/react';
 
 import type { AppDispatch } from '../store';
 
 // Styled components using Emotion
-const HeaderSection = styled(Box)`
-  background: linear-gradient(135deg, ${(props: any) => props.theme.palette.primary.main} 0%, ${(props: any) => props.theme.palette.secondary.main} 100%) !important;
-  border-radius: 16px !important;
-  padding: 32px !important;
-  margin-bottom: 32px !important;
-  color: white !important;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3) !important;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
+const HeaderSection = styled(Box)(({ theme }) => ({
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+  borderRadius: '16px',
+  padding: '32px',
+  marginBottom: '32px',
+  color: 'white',
+  boxShadow: '0 12px 24px rgba(0, 0, 0, 0.3)',
+  position: 'relative',
+  overflow: 'hidden',
+  width: '100%',
   
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    transform: rotate(30deg);
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: '-50%',
+    left: '-50%',
+    width: '200%',
+    height: '200%',
+    background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)',
+    transform: 'rotate(30deg)',
   }
-`;
+}));
 
 const HeaderTitle = styled(Typography)`
   font-weight: 800 !important;
@@ -81,23 +79,23 @@ const HeaderSubtitle = styled(Typography)`
   position: relative;
 `;
 
-const AddSongButton = styled(Button)`
-  background-color: white !important;
-  color: ${(props: any) => props.theme.palette.primary.main} !important;
-  border-radius: 30px !important;
-  padding: 12px 24px !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-  position: relative;
-  transition: all 0.3s ease !important;
+const AddSongButton = styled(Button)(({ theme }) => ({
+  backgroundColor: 'white',
+  color: theme.palette.primary.main,
+  borderRadius: '30px',
+  padding: '12px 24px',
+  fontWeight: 600,
+  textTransform: 'none',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+  position: 'relative',
+  transition: 'all 0.3s ease',
   
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3) !important;
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 16px rgba(0, 0, 0, 0.3)',
   }
-`;
+}));
 
 const StatsCard = styled(Paper)`
   border-radius: 12px !important;
@@ -115,13 +113,13 @@ const StatsCard = styled(Paper)`
   }
 `;
 
-const StatIconContainer = styled(Box)`
-  background-color: ${(props: any) => `rgba(${props.color}, 0.1)`} !important;
-  border-radius: 50% !important;
-  padding: 12px !important;
-  margin-right: 16px !important;
-  display: flex !important;
-`;
+const StatIconContainer = styled(Box)(({ color }) => ({
+  backgroundColor: `rgba(${color}, 0.1)`,
+  borderRadius: '50%',
+  padding: '12px',
+  marginRight: '16px',
+  display: 'flex',
+}));
 
 const SongCard = styled(Card)`
   height: 100% !important;
@@ -209,17 +207,11 @@ const SongList: React.FC = () => {
   const [editingSong, setEditingSong] = useState<Song | null>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    dispatch(fetchSongs());
-    dispatch(fetchStats());
+    dispatch(fetchSongs.pending());
+    dispatch(fetchStats.pending());
   }, [dispatch]);
-
-  const handleAddSong = () => {
-    setEditingSong(null);
-    setOpenDialog(true);
-  };
 
   const handleEditSong = (song: Song) => {
     setEditingSong(song);
@@ -228,7 +220,7 @@ const SongList: React.FC = () => {
 
   const handleDeleteSong = (id: string) => {
     if (window.confirm('Are you sure you want to delete this song?')) {
-      dispatch(deleteSong(id));
+      dispatch(deleteSong.pending(id));
     }
   };
 
@@ -268,7 +260,7 @@ const SongList: React.FC = () => {
         <AddSongButton 
           variant="contained" 
           startIcon={<AddIcon />} 
-          onClick={handleAddSong}
+          onClick={() => dispatch(fetchSongs.pending())}
         >
           Add New Song
         </AddSongButton>
@@ -395,7 +387,7 @@ const SongList: React.FC = () => {
           <Button 
             variant="contained" 
             startIcon={<AddIcon />} 
-            onClick={handleAddSong}
+            onClick={() => dispatch(fetchSongs.pending())}
             size="large"
             sx={{
               background: 'linear-gradient(45deg, #1DB954 30%, #1ed760 90%)',

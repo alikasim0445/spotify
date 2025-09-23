@@ -15,18 +15,6 @@ const buttonClick = keyframes`
   }
 `;
 
-const pulse = keyframes`
-  0% {
-    box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(29, 185, 84, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(29, 185, 84, 0);
-  }
-`;
-
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'icon';
   size?: 'small' | 'medium' | 'large';

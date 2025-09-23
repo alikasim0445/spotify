@@ -154,10 +154,12 @@ const CloseButton = styled.button`
   }
 `;
 
-export default Object.assign(ModalContent, {
+const Modal = Object.assign(ModalContent, {
   Overlay: ModalOverlay,
   Header: ModalHeader,
   Body: ModalBody,
   Footer: ModalFooter,
   CloseButton,
 });
+
+export default Modal;
